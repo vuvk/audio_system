@@ -13,17 +13,11 @@ bool FileManager::isInit = false;
 
 File::File(const std::string fileName, const std::string mode)
 {
-    if (!FileManager::IsInitialized())
-        FileManager::Init(nullptr);
-
     open(fileName, mode);
 }
 File::~File()
 {
-    if (!FileManager::IsInitialized())
-        FileManager::Init(nullptr);
-
-    PHYSFS_close(this->m_handle);
+    close();
 }
 
 bool File::exists(const std::string fileName)
