@@ -23,7 +23,13 @@ I used MSYS2 with mingw-w64 7.3 and cmake for create libraries in Windows.
 For Ubuntu/Debian Linux:
 
 `$ sudo apt install libalure1 libalure-dev libphysfs1 libphysfs-dev libopenal1 libopenal-dev`
+
+`$ git clone https://github.com/vuvk/audio_system`
+
 `$ cd audio_system/build`
+
 `$ ./cmake_prepare.sh`
+
 `$ make`
 
+`$ ./audio_system music.it`
