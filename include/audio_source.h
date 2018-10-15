@@ -6,8 +6,8 @@
 #include "audio_buffer.h"
 #include "audio_system.h"
 
-#define STREAM_BUFFER_SIZE 32 * 1024    // size of chunk in bytes
-#define BUFFERS_NUM 4                   // count of chunks
+#define STREAM_BUFFER_SIZE 65535    // size of chunk in bytes
+#define BUFFERS_NUM 16              // count of chunks
 //#define STREAM_LENGTH_MS 250000   // size of chunk in msec
 
 class AudioSource
