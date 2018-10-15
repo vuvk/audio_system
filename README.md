@@ -28,7 +28,7 @@ For Ubuntu/Debian Linux:
 
 `$ cd audio_system/build`
 
-`$ ./cmake_prepare.sh`
+`$ cmake ..`
 
 `$ make`
 
