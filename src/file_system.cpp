@@ -1,6 +1,5 @@
 #include <sstream>
 #include <iostream>
-#include <streambuf>
 #include "file_system.h"
 
 using namespace FileSystem;
@@ -149,6 +148,18 @@ int64_t File::read(char* buffer, uint64_t length)
     return -1;
 }
 
+int64_t File::write(const char* buffer, uint64_t length)
+{
+    if (this->m_handle)
+    {
+        if (!FileManager::IsInitialized())
+            FileManager::Init(nullptr);
+
+        return PHYSFS_writeBytes(this->m_handle, buffer, length);
+    }
+    return -1;
+}
+
 bool File::readFull(char** buffer, uint64_t* bufferSize)
 {
     if (!this->m_handle)
@@ -185,114 +196,6 @@ bool File::eof()
 
 
 /**
- * PhysFSBuf class
- **/
-
-PhysFSBuf::int_type PhysFSBuf::underflow()
-{
-    if(mFile && gptr() == egptr())
-    {
-        // Read in the next chunk of data, and set the read pointers on
-        // success
-        PHYSFS_sint64 got = PHYSFS_read(mFile,
-            mBuffer.data(), sizeof(char_type), mBuffer.size()
-        );
-
-        if(got != -1)
-            setg(mBuffer.data(), mBuffer.data(), mBuffer.data()+got);
-    }
-
-    if (gptr() == egptr())
-        return traits_type::eof();
-
-    return traits_type::to_int_type(*gptr());
-}
-
-PhysFSBuf::pos_type PhysFSBuf::seekoff(off_type offset, std::ios_base::seekdir whence, std::ios_base::openmode mode)
-{
-    if(!mFile || (mode&std::ios_base::out) || !(mode&std::ios_base::in))
-        return traits_type::eof();
-
-    // PhysFS only seeks using absolute offsets, so we have to convert cur-
-    // and end-relative offsets.
-    PHYSFS_sint64 fpos;
-    switch(whence)
-    {
-        case std::ios_base::beg:
-            break;
-
-        case std::ios_base::cur:
-            // Need to offset for the file offset being at egptr() while
-            // the requested offset is relative to gptr().
-            offset -= off_type(egptr()-gptr());
-            if((fpos=PHYSFS_tell(mFile)) == -1)
-                return traits_type::eof();
-            // If the offset remains in the current buffer range, just
-            // update the pointer.
-            if(offset < 0 && -offset <= off_type(egptr()-eback()))
-            {
-                setg(eback(), egptr()+offset, egptr());
-                return fpos + offset;
-            }
-            offset += fpos;
-            break;
-
-        case std::ios_base::end:
-            if((fpos=PHYSFS_fileLength(mFile)) == -1)
-                return traits_type::eof();
-            offset += fpos;
-            break;
-
-        default:
-            return traits_type::eof();
-    }
-
-    if(offset < 0) return traits_type::eof();
-    if(PHYSFS_seek(mFile, offset) == 0)
-    {
-        // HACK: Workaround a bug in PhysFS. Certain archive types error
-        // when trying to seek to the end of the file. So if seeking to the
-        // end of the file fails, instead try seeking to the last byte and
-        // read it.
-        if(offset != PHYSFS_fileLength(mFile))
-            return traits_type::eof();
-        if(PHYSFS_seek(mFile, offset-1) == 0)
-            return traits_type::eof();
-        PHYSFS_read(mFile, mBuffer.data(), 1, 1);
-    }
-    // Clear read pointers so underflow() gets called on the next read
-    // attempt.
-    setg(nullptr, nullptr, nullptr);
-    return offset;
-}
-
-PhysFSBuf::pos_type PhysFSBuf::seekpos(pos_type pos, std::ios_base::openmode mode)
-{
-    // Simplified version of seekoff
-    if(!mFile || (mode&std::ios_base::out) || !(mode&std::ios_base::in))
-        return traits_type::eof();
-
-    if(PHYSFS_seek(mFile, pos) == 0)
-        return traits_type::eof();
-    setg(nullptr, nullptr, nullptr);
-    return pos;
-}
-
-bool PhysFSBuf::open(const char *filename) noexcept
-{
-    mFile = PHYSFS_openRead(filename);
-    if(!mFile) return false;
-    return true;
-}
-
-PhysFSBuf::~PhysFSBuf()
-{
-    PHYSFS_close(mFile);
-    mFile = nullptr;
-}
-
-
-/**
  * FileManager class
  * */
 
@@ -306,14 +209,6 @@ FileManager::~FileManager()
     Deinit();
 }
 
-alure::UniquePtr<std::istream> FileManager::openFile(const alure::String &name) noexcept
-{
-    auto stream = alure::MakeUnique<Stream>(name.c_str());
-    if (stream->fail())
-        stream = nullptr;
-    return std::move(stream);
-}
-
 void FileManager::Init(const char* argv0)
 {
     if (isInit)
@@ -321,15 +216,13 @@ void FileManager::Init(const char* argv0)
 
     // Need to initialize PhysFS before using it
     if (PHYSFS_init(argv0) == 0)
-        throw std::runtime_error(alure::String("Failed to initialize PhysFS: ") +
-                                 PHYSFS_getLastError());
+        std::cout << "Failed to initialize PhysFS: " << PHYSFS_getLastError() << std::endl;
     isInit = true;
-/*
-    std::cout<< "Initialized PhysFS, supported archive formats:";
-    for(const PHYSFS_ArchiveInfo **i = PHYSFS_supportedArchiveTypes();*i != NULL;i++)
-        std::cout<< "\n  "<<(*i)->extension<<": "<<(*i)->description;
-    std::cout<<std::endl;
- */
+
+    std::cout << "Initialized PhysFS, supported archive formats:";
+    for (const PHYSFS_ArchiveInfo **i = PHYSFS_supportedArchiveTypes(); *i != nullptr; ++i)
+        std::cout << "\n  " << (*i)->extension << ": " << (*i)->description;
+    std::cout << std::endl;
 }
 
 void FileManager::Deinit()

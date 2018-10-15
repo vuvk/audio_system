@@ -23,10 +23,15 @@
 # Compiled Static libraries
 *.lai
 *.la
-#*.a
+*.a
 *.lib
 
 # Executables
-#*.exe
+*.exe
 *.out
 *.app
+
+/build/CMakeFiles/
+/build/CMakeCache.txt
+/build/Makefile
+/build/cmake_install.cmake

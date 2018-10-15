@@ -1,10 +1,10 @@
 # Sound system
-Sound system based on alure2 (OpenAL) with file system based on PhysFS
+Sound system based on alure1.2 (OpenAL) with file system based on PhysFS
 
-### alure2 
+### alure1.2 
 Alure is a C++ 3D audio API. It uses OpenAL for audio rendering, and provides common higher-level features such as file loading and decoding, buffer caching, background streaming, and source management for virtually unlimited sound source handles.
 
-Link : <https://github.com/kcat/alure>
+Link : <https://repo.or.cz/alure.git/shortlog/refs/heads/alure-1.x>
 
 ### libPhysFS 
 PhysicsFS is a library to provide abstract access to various archives. The programmer does not know and does not care where each of these files came from, and what sort of archive (if any) is storing them.
@@ -12,4 +12,17 @@ PhysicsFS is a library to provide abstract access to various archives. The progr
 Link : <https://icculus.org/physfs/>
 
 ### Small info
-I used QtCreator with qmake and builded executable to folders "build/debug" or "build/release". All dynamic libraries (dll) were create with MSYS2 and mingw-w64 7.3
+dependencies  |
+------------- |
+libalure |
+libphysfs |
+libopenal |
+
+I used MSYS2 with mingw-w64 7.3 and cmake for create libraries in Windows.
+
+For Ubuntu/Debian Linux:
+`$ sudo apt install libalure1 libalure-dev libphysfs1 libphysfs-dev libopenal1 libopenal-dev`
+`$ cd audio_system/build`
+`$ ./cmake_prepare.sh`
+`$ make`
+

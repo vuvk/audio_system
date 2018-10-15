@@ -1,2 +1,0 @@
-sound_system music.flac
-pause
