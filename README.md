@@ -1,5 +1,5 @@
-# Sound system
-Sound system based on alure1.2 (OpenAL) with file system based on PhysFS
+# Audio system
+Audio system based on alure1.2 (OpenAL) with file system based on PhysFS
 
 ### alure1.2 
 Alure is a C++ 3D audio API. It uses OpenAL for audio rendering, and provides common higher-level features such as file loading and decoding, buffer caching, background streaming, and source management for virtually unlimited sound source handles.
@@ -21,6 +21,7 @@ libopenal |
 I used MSYS2 with mingw-w64 7.3 and cmake for create libraries in Windows.
 
 For Ubuntu/Debian Linux:
+
 `$ sudo apt install libalure1 libalure-dev libphysfs1 libphysfs-dev libopenal1 libopenal-dev`
 `$ cd audio_system/build`
 `$ ./cmake_prepare.sh`
