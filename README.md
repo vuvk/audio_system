@@ -12,24 +12,42 @@ PhysicsFS is a library to provide abstract access to various archives. The progr
 Link : <https://icculus.org/physfs/>
 
 ### Small info
+Supported formats|
+------------- |
+WAV |
+OGG |
+FLAC|
+MP3 |
+XM, MPTM, IT, S3M |
+MIDI |
+
+> You can use another SoundFont to change the MIDI sound. 
+> To do this, replace the file sound_font.fs2 (there are several versions in the "build" folder).
+
 dependencies  |
 ------------- |
 libalure |
 libphysfs |
 libopenal |
+libfluidsynth |
+libFLAC |
+libsndfile |
+libmodplug |
+libmpg123 |
+libogg |
+libvorbis |
+libvorbisfile |
+libvorbisenc |
 
 I used MSYS2 with mingw-w64 7.3 and cmake for create libraries in Windows.
 
 For Ubuntu/Debian Linux:
 
-`$ sudo apt install libalure1 libalure-dev libphysfs1 libphysfs-dev libopenal1 libopenal-dev`
-
-`$ git clone https://github.com/vuvk/audio_system`
-
-`$ cd audio_system/build`
-
-`$ cmake ..`
-
-`$ make`
-
-`$ ./audio_system music.it`
+```sh
+$ sudo apt install libalure1 libalure-dev libphysfs1 libphysfs-dev libopenal1 libopenal-dev libfluidsynth1 libsndfile1 libmodplug1 libmpg123-0 libogg0 libvorbis0a libvorbisfile3 libvorbisenc2 libflac8
+$ git clone https://github.com/vuvk/audio_system
+$ cd audio_system/build
+$ cmake ..
+$ make
+$ ./audio_system music.mid
+```

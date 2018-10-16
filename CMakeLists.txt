@@ -62,5 +62,14 @@ endif (UNIX)
 target_link_libraries(${PROJECT_NAME}
     physfs
     openal
+	fluidsynth
+	FLAC
+	sndfile
+	modplug
+	mpg123
+	ogg
+	vorbis
+	vorbisfile
+	vorbisenc
     ${ALURE_LIB}
     )

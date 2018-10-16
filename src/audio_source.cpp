@@ -48,6 +48,18 @@ void AudioSource::setBuffer(AudioBuffer* buffer)
     if (buffer->isStreamed())
     {
         m_stream = alureCreateStreamFromFile(buffer->getFileName().c_str(), STREAM_BUFFER_SIZE, BUFFERS_NUM, m_streamBuffer);
+        if (!m_stream)
+        {
+            std::cout << "Could not create a stream!" << std::endl;
+            std::cout << "Error: " << alureGetErrorString() << std::endl;
+        }
+
+        // patchset for playing midi
+        if (!alureSetStreamPatchset(m_stream, SOUND_FONT_NAME))
+        {
+            std::cout << "Could not load sound font '" << SOUND_FONT_NAME << "'!" << std::endl;
+            std::cout << "Error: " << alureGetErrorString() << std::endl;
+        }
     }
     else
     {

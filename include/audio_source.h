@@ -9,6 +9,7 @@
 #define STREAM_BUFFER_SIZE 65535    // size of chunk in bytes
 #define BUFFERS_NUM 16              // count of chunks
 //#define STREAM_LENGTH_MS 250000   // size of chunk in msec
+#define SOUND_FONT_NAME "sound_font.sf2"    // name of soundfont (*.sf2) for playing MIDI
 
 class AudioSource
 {
