@@ -1,5 +1,5 @@
 # Audio system
-Audio system based on alure1.2 (OpenAL) with file system based on PhysFS
+Audio system based on alure1.2 (OpenAL) with file system based on PhysFS. This system can play audio from buffers or stream, both from a folder and from archives directly.
 
 ### alure1.2 
 Alure is a C++ 3D audio API. It uses OpenAL for audio rendering, and provides common higher-level features such as file loading and decoding, buffer caching, background streaming, and source management for virtually unlimited sound source handles.
