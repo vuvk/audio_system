@@ -152,6 +152,34 @@ void AudioSystem::SetListenerVelocity(float* velocity)
     alListenerfv(AL_VELOCITY, m_listenerVel);
 }
 
+void AudioSystem::SetListenerPosition(float x, float y, float z)
+{
+    m_listenerPos[0] = x;
+    m_listenerPos[1] = y;
+    m_listenerPos[2] = z;
+    alListenerfv(AL_POSITION, m_listenerPos);
+}
+
+void AudioSystem::SetListenerOrientation(float tX, float tY, float tZ,
+                                         float uX, float uY, float uZ)
+{
+    m_listenerOri[0] = tX;
+    m_listenerOri[1] = tY;
+    m_listenerOri[2] = tZ;
+    m_listenerOri[3] = uX;
+    m_listenerOri[4] = uY;
+    m_listenerOri[5] = uZ;
+    alListenerfv(AL_VELOCITY, m_listenerVel);
+}
+
+void AudioSystem::SetListenerVelocity(float x, float y, float z)
+{
+    m_listenerVel[0] = x;
+    m_listenerVel[1] = y;
+    m_listenerVel[2] = z;
+    alListenerfv(AL_VELOCITY, m_listenerVel);
+}
+
 void AudioSystem::GetListenerPosition(float* position)
 {
     if (position)

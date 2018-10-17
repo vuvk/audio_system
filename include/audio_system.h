@@ -18,6 +18,10 @@ public:
     static void SetListenerPosition   (float* position);
     static void SetListenerOrientation(float* orientation);
     static void SetListenerVelocity   (float* velocity);
+    static void SetListenerPosition   (float x, float y, float z);
+    static void SetListenerOrientation(float tX, float tY, float tZ,
+                                       float uX, float uY, float uZ);
+    static void SetListenerVelocity   (float x, float y, float z);
 
     static void GetListenerPosition   (float* position);
     static void GetListenerOrientation(float* orientation);
