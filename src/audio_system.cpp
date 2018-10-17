@@ -181,13 +181,13 @@ void AudioSystem::Update()
     alureUpdate();
 
     for (auto source : audioSources)
-	{
+    {
         source->update();
-		if (!source->isRelative())
+        if (!source->isRelative())
         {
             source->setPosition(m_listenerPos);
         }
-	}
+    }
 
     CheckErrorAL();
 }
