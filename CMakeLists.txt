@@ -17,13 +17,9 @@ include_directories(
 
 # инклуды
 set(HEADERS
-    "${INCLUDE_DIR}/AL/al.h"
-    "${INCLUDE_DIR}/AL/alc.h"
-    "${INCLUDE_DIR}/AL/alure.h"
     "${INCLUDE_DIR}/audio_buffer.h"
     "${INCLUDE_DIR}/audio_source.h"
     "${INCLUDE_DIR}/audio_system.h"
-    "${INCLUDE_DIR}/physfs.h"
     "${INCLUDE_DIR}/file_system.h"
     )
 
