@@ -37,15 +37,15 @@ namespace FileSystem
     class FileManager
     {
     public:
-        FileManager(const char* argv0 = nullptr);
+        FileManager(const std::string argv0 = "");
         ~FileManager();
 
-        static void Init(const char* argv0 = nullptr);
+        static void Init(const std::string argv0 = "");
         static void Deinit();
 
         // A PhysFS-specific function to mount a new path to the virtual directory
         // tree.
-        static bool Mount(const char *path, const char *mountPoint=nullptr, int append=0);
+        static bool Mount(const std::string path, const char* mountPoint=nullptr, int append = 0);
         static void ListDirectory(std::string&& dir);
 
         inline static bool IsInitialized()

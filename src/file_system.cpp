@@ -199,7 +199,7 @@ bool File::eof()
  * FileManager class
  * */
 
-FileManager::FileManager(const char* argv0)
+FileManager::FileManager(const std::string argv0)
 {
     Init(argv0);
 }
@@ -209,13 +209,13 @@ FileManager::~FileManager()
     Deinit();
 }
 
-void FileManager::Init(const char* argv0)
+void FileManager::Init(const std::string argv0)
 {
     if (isInit)
         return;
 
     // Need to initialize PhysFS before using it
-    if (PHYSFS_init(argv0) == 0)
+    if (PHYSFS_init(argv0.c_str()) == 0)
     {
         std::cout << "Failed to initialize PhysFS." << std::endl;
         PrintLastError();
@@ -223,7 +223,7 @@ void FileManager::Init(const char* argv0)
     isInit = true;
 
     std::cout << "Initialized PhysFS, supported archive formats:";
-    for (const PHYSFS_ArchiveInfo **i = PHYSFS_supportedArchiveTypes(); *i != nullptr; ++i)
+    for (const PHYSFS_ArchiveInfo** i = PHYSFS_supportedArchiveTypes(); *i != nullptr; ++i)
         std::cout << "\n  " << (*i)->extension << ": " << (*i)->description;
     std::cout << std::endl;
 }
@@ -237,12 +237,12 @@ void FileManager::Deinit()
     }
 }
 
-bool FileManager::Mount(const char* path, const char *mountPoint, int append)
+bool FileManager::Mount(const std::string path, const char* mountPoint, int append)
 {
     if (!isInit)
         Init();
 
-    if (PHYSFS_mount(path, mountPoint, append) == 0)
+    if (PHYSFS_mount(path.c_str(), mountPoint, append) == 0)
     {
         std::cout << "Failed to add \"" << path << "\"" << std::endl;
         PrintLastError();
