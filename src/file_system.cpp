@@ -216,7 +216,10 @@ void FileManager::Init(const char* argv0)
 
     // Need to initialize PhysFS before using it
     if (PHYSFS_init(argv0) == 0)
-        std::cout << "Failed to initialize PhysFS: " << PHYSFS_getLastError() << std::endl;
+    {
+        std::cout << "Failed to initialize PhysFS." << std::endl;
+        PrintLastError();
+    }
     isInit = true;
 
     std::cout << "Initialized PhysFS, supported archive formats:";
@@ -241,7 +244,8 @@ bool FileManager::Mount(const char* path, const char *mountPoint, int append)
 
     if (PHYSFS_mount(path, mountPoint, append) == 0)
     {
-        std::cout << "Failed to add \"" << path << "\": " << PHYSFS_getLastError() << std::endl;
+        std::cout << "Failed to add \"" << path << "\"" << std::endl;
+        PrintLastError();
         return false;
     }
     return true;
@@ -253,13 +257,35 @@ void FileManager::ListDirectory(std::string&& dir)
         Init();
 
     char** files = PHYSFS_enumerateFiles(dir.c_str());
-    for(int i = 0;files[i];++i)
+    PHYSFS_Stat stat;
+    for(int i = 0; files[i]; ++i)
     {
         std::string file = dir + files[i];
-        if(PHYSFS_isDirectory(file.c_str()))
-            ListDirectory(file+"/");
+
+        if (!PHYSFS_stat(file.c_str(), &stat))
+        {
+            PrintLastError();
+            continue;
+        }
+
+        if (stat.filetype == PHYSFS_FILETYPE_DIRECTORY)
+            ListDirectory(file + "/");
         else
-            std::cout<<"  "<<file<<"\n";
+            std::cout << "  " << file << std::endl;
     }
     PHYSFS_freeList(files);
+}
+
+bool FileSystem::IsErrorExists()
+{
+    return (PHYSFS_getLastErrorCode() != PHYSFS_ERR_OK);
+}
+
+void FileSystem::PrintLastError()
+{
+    if (FileSystem::IsErrorExists())
+    {
+        PHYSFS_ErrorCode errorCode = PHYSFS_getLastErrorCode();
+        std::cout << "Error: " << PHYSFS_getErrorByCode(errorCode) << std::endl;
+    }
 }

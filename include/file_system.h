@@ -10,10 +10,6 @@ namespace FileSystem
 {
     class File
     {
-    private :
-        PHYSFS_file* m_handle = nullptr;
-        std::string m_fileName = "";
-
     public:
         File(const std::string fileName = "", const std::string mode = "r");
         ~File();
@@ -32,6 +28,10 @@ namespace FileSystem
         int64_t write(const char* buffer, uint64_t length);
         bool readFull(char** buffer, uint64_t* bufferSize);
         bool eof();
+
+    private :
+        PHYSFS_file* m_handle = nullptr;
+        std::string m_fileName = "";
     };
 
     class FileManager
@@ -56,6 +56,9 @@ namespace FileSystem
     private:
         static bool isInit;
     };
+
+    bool IsErrorExists();
+    void PrintLastError();
 }
 
 #endif // FILE_SYSTEM_H
