@@ -13,13 +13,6 @@
 
 class AudioSource
 {
-private:
-    ALuint m_source;
-    ALuint m_streamBuffer[BUFFERS_NUM];
-    bool   m_isLoop = false;
-    AudioBuffer* m_audioBuffer = nullptr; // current source of pcm data
-    alureStream* m_stream = nullptr;
-
 public:
     AudioSource(AudioBuffer* buffer = nullptr);
     ~AudioSource();
@@ -52,6 +45,13 @@ public:
     bool isLooping();
     bool isPaused();
     bool isStopped();
+
+private:
+    ALuint m_source;
+    ALuint m_streamBuffer[BUFFERS_NUM];
+    bool   m_isLoop = false;
+    AudioBuffer* m_audioBuffer = nullptr; // current source of pcm data
+    alureStream* m_stream = nullptr;
 };
 
 

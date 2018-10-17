@@ -8,11 +8,6 @@ class AudioSource;  // from "audio_source.h"
 
 class AudioSystem
 {
-private:
-    static float m_listenerPos[3];
-    static float m_listenerOri[6];
-    static float m_listenerVel[3];
-
 public:
     static std::vector<AudioSource*> audioSources;
     static std::vector<AudioBuffer*> audioBuffers;
@@ -33,6 +28,11 @@ public:
     static void Resume();
 
     static void CheckErrorAL();
+
+private:
+    static float m_listenerPos[3];
+    static float m_listenerOri[6];
+    static float m_listenerVel[3];
 };
 
 #endif // AUDIO_SYSTEM_H

@@ -14,11 +14,6 @@ using namespace FileSystem;
 
 class AudioBuffer
 {
-private:
-    std::string m_fileName = "";
-    ALuint m_buffer = 0;
-    bool m_isStreamed = false;
-
 public:
     AudioBuffer(const std::string fileName, bool isStreamed = false);
     ~AudioBuffer();
@@ -30,6 +25,11 @@ public:
     const std::string getFileName();
 
     bool isStreamed();
+
+private:
+    std::string m_fileName = "";
+    ALuint m_buffer = 0;
+    bool m_isStreamed = false;
 };
 
 #endif // SOUND_H
