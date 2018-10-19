@@ -14,6 +14,8 @@ public:
 
     static void Init();
     static void Deinit();
+    static void DeleteAllBuffers();
+    static void DeleteAllSources();
 
     static void SetListenerPosition   (float* position);
     static void SetListenerOrientation(float* orientation);

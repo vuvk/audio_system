@@ -51,7 +51,7 @@ public:
     bool isPaused();
     bool isStopped();
 
-private:
+protected:
     ALuint m_source;
     ALuint m_streamBuffer[BUFFERS_NUM];
     bool   m_isLoop = false;

@@ -26,7 +26,7 @@ public:
 
     bool isStreamed();
 
-private:
+protected:
     std::string m_fileName = "";
     ALuint m_buffer = 0;
     bool m_isStreamed = false;

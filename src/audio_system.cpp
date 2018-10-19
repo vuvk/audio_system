@@ -125,15 +125,24 @@ void AudioSystem::Deinit()
 {
     std:: cout << "Shutting down OpenAL..." << std::endl;
 
-    for (auto source : audioSources)
-        delete source;
-    audioSources.clear();
+    DeleteAllSources();
+    DeleteAllBuffers();
 
+    alureShutdownDevice();
+}
+
+void AudioSystem::DeleteAllBuffers()
+{
     for (auto buffer : audioBuffers)
         delete buffer;
     audioBuffers.clear();
+}
 
-    alureShutdownDevice();
+void AudioSystem::DeleteAllSources()
+{
+    for (auto source : audioSources)
+        delete source;
+    audioSources.clear();
 }
 
 void AudioSystem::SetListenerPosition(float* position)
