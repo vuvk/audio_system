@@ -1,4 +1,5 @@
 #include "audio_buffer.h"
+#include "audio_source.h"
 #include "audio_system.h"
 
 AudioBuffer::AudioBuffer(const std::string fileName, bool isStreamed)
@@ -10,7 +11,17 @@ AudioBuffer::AudioBuffer(const std::string fileName, bool isStreamed)
 AudioBuffer::~AudioBuffer()
 {
     unload();
-
+	
+	/* unset current buffer from sources which use it */
+	for (std::vector<AudioSource*>::iterator it = AudioSystem::audioSources.begin();
+		 it != AudioSystem::audioSources.end();
+		 ++it)
+	{
+		if ((*it)->getBuffer() == this)
+			(*it)->unsetBuffer();
+	}
+	
+	/* delete it from list of buffers */
     for (std::vector<AudioBuffer*>::iterator it = AudioSystem::audioBuffers.begin();
          it != AudioSystem::audioBuffers.end();
          ++it)
@@ -22,6 +33,8 @@ AudioBuffer::~AudioBuffer()
             break;
         }
     }
+	
+	AudioSystem::CheckErrorAL();
 }
 
 void AudioBuffer::load(const std::string fileName, bool isStreamed)
@@ -43,6 +56,7 @@ void AudioBuffer::load(const std::string fileName, bool isStreamed)
         if(!m_buffer)
         {
             std::cout << "Could not load " << fileName << ": " << alureGetErrorString() << std::endl;
+			AudioSystem::CheckErrorAL();
             return;
         }
     }
