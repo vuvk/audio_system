@@ -76,7 +76,6 @@ alureInt64 seek_callback(void* handle, alureInt64 offset, int whence)
 
 void AudioSystem::Init()
 {
-
     std::cout << "Initializing OpenAL..." << std::endl;
 
     if (!alureInitDevice(nullptr, nullptr))
@@ -117,6 +116,9 @@ void AudioSystem::Init()
                         write_callback,
                         seek_callback);
 
+	alListenerfv(AL_POSITION,    m_listenerPos);
+	alListenerfv(AL_ORIENTATION, m_listenerOri);
+	alListenerfv(AL_VELOCITY,    m_listenerVel);	
 }
 
 void AudioSystem::Deinit()
@@ -137,19 +139,19 @@ void AudioSystem::Deinit()
 void AudioSystem::SetListenerPosition(float* position)
 {
     memcpy(m_listenerPos, position, sizeof(float) * 3);
-    alListenerfv(AL_POSITION, m_listenerPos);
+    alListenerfv(AL_POSITION, position);
 }
 
 void AudioSystem::SetListenerOrientation(float* orientation)
 {
     memcpy(m_listenerOri, orientation, sizeof(float) * 6);
-    alListenerfv(AL_ORIENTATION, m_listenerOri);
+    alListenerfv(AL_ORIENTATION, orientation);
 }
 
 void AudioSystem::SetListenerVelocity(float* velocity)
 {
     memcpy(m_listenerVel, velocity, sizeof(float) * 3);
-    alListenerfv(AL_VELOCITY, m_listenerVel);
+    alListenerfv(AL_VELOCITY, velocity);
 }
 
 void AudioSystem::SetListenerPosition(float x, float y, float z)
@@ -169,7 +171,7 @@ void AudioSystem::SetListenerOrientation(float tX, float tY, float tZ,
     m_listenerOri[3] = uX;
     m_listenerOri[4] = uY;
     m_listenerOri[5] = uZ;
-    alListenerfv(AL_VELOCITY, m_listenerVel);
+    alListenerfv(AL_ORIENTATION, m_listenerOri);
 }
 
 void AudioSystem::SetListenerVelocity(float x, float y, float z)
@@ -206,17 +208,12 @@ void AudioSystem::GetListenerVelocity (float* velocity)
 
 void AudioSystem::Update()
 {
-    alureUpdate();
-
     for (auto source : audioSources)
     {
         source->update();
-        if (!source->isRelative())
-        {
-            source->setPosition(m_listenerPos);
-        }
     }
 
+    alureUpdate();
     CheckErrorAL();
 }
 
