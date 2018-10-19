@@ -16,6 +16,7 @@ static void eos_callback(void* userdata, ALuint source)
 AudioSource::AudioSource(AudioBuffer* buffer)
 {
     alGenSources(1, &m_source);
+	reset();
     if (buffer)
         setBuffer(buffer);
     AudioSystem::audioSources.push_back(this);
@@ -40,7 +41,7 @@ AudioSource::~AudioSource()
 }
 
 void AudioSource::setBuffer(AudioBuffer* buffer)
-{
+{	
     unsetBuffer();
 
     this->m_audioBuffer = buffer;
@@ -79,15 +80,23 @@ void AudioSource::unsetBuffer()
         alureDestroyStream(m_stream, BUFFERS_NUM, m_streamBuffer);
         memset(m_streamBuffer, 0, sizeof(m_streamBuffer));
     }
-    else
-    {
-        alSourcei(m_source, AL_BUFFER, 0);
-    }
+	
+	alSourcei(m_source, AL_BUFFER, 0);    
+}
+
+AudioBuffer* AudioSource::getBuffer()
+{
+	return m_audioBuffer;
 }
 
 void AudioSource::setLooping(bool isLoop)
 {
     m_isLoop = isLoop;
+}
+
+void AudioSource::setPitch(float pitch)
+{
+    alSourcef(m_source, AL_PITCH, pitch);
 }
 
 void AudioSource::setGain(float gain)
@@ -106,6 +115,17 @@ void AudioSource::setPosition(float x, float y, float z)
     alSourcefv(m_source, AL_POSITION, position);
 }
 
+void AudioSource::setVelocity(float* velocity)
+{
+    alSourcefv(m_source, AL_VELOCITY, velocity);
+}
+
+void AudioSource::setVelocity(float x, float y, float z)
+{
+    float velocity[3] = {x, y, z};
+    alSourcefv(m_source, AL_VELOCITY, velocity);
+}
+
 void AudioSource::setRelative(bool isRelative)
 {
     if (isRelative)
@@ -117,8 +137,10 @@ void AudioSource::setRelative(bool isRelative)
 void AudioSource::reset()
 {
     alSource3f(m_source, AL_POSITION, 0, 0, 0);
+    alSource3f(m_source, AL_VELOCITY, 0, 0, 0);
     alSourcei (m_source, AL_LOOPING, AL_FALSE);
     alSourcef (m_source, AL_GAIN, 1.0f);
+    alSourcef (m_source, AL_PITCH, 1.0f);
     alSourcei (m_source, AL_BUFFER, AL_NONE);
     alSourcei (m_source, AL_SOURCE_RELATIVE, AL_FALSE);
     m_isLoop = false;
@@ -126,7 +148,7 @@ void AudioSource::reset()
 
 void AudioSource::play(bool isLoop)
 {
-    this->m_isLoop = isLoop;
+	setLooping(isLoop);
 
     if (m_stream)
     {

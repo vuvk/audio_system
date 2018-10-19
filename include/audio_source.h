@@ -19,12 +19,17 @@ public:
 
     void setBuffer(AudioBuffer* buffer);
     void unsetBuffer();
+	AudioBuffer* getBuffer();
 
     void setLooping(bool isLoop);
+    void setPitch(float pitch);
     void setGain(float gain);
     void setPosition(float* position);
     void setPosition(float x, float y, float z);
     void setRelative(bool isRelative = false);
+    void setVelocity(float* velocity);
+    void setVelocity(float x, float y, float z);
+
 
     /*
         Reset all attributes to their default value
