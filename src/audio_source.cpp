@@ -1,4 +1,5 @@
 #include "audio_source.h"
+#include "audio_system.h"
 
 
 static void eos_callback(void* userdata, ALuint source)

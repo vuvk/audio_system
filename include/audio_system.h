@@ -1,10 +1,12 @@
-#ifndef AUDIO_SYSTEM_H
-#define AUDIO_SYSTEM_H
+#ifndef _AUDIO_SYSTEM_H
+#define _AUDIO_SYSTEM_H
 
 #include <vector>
+#include "audio_buffer.h"
+#include "audio_source.h"
 
-class AudioBuffer;  // from "audio_buffer.h"
-class AudioSource;  // from "audio_source.h"
+//class AudioBuffer;  // from "audio_buffer.h"
+//class AudioSource;  // from "audio_source.h"
 
 class AudioSystem
 {
@@ -41,4 +43,4 @@ private:
     static float m_listenerVel[3];
 };
 
-#endif // AUDIO_SYSTEM_H
+#endif // _AUDIO_SYSTEM_H

@@ -1,5 +1,5 @@
-#ifndef SOUND_H
-#define SOUND_H
+#ifndef _AUDIO_BUFFER_H
+#define _AUDIO_BUFFER_H
 
 #include <iostream>
 #include <string>
@@ -32,4 +32,4 @@ protected:
     bool m_isStreamed = false;
 };
 
-#endif // SOUND_H
+#endif // _AUDIO_BUFFER_H

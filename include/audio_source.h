@@ -1,10 +1,10 @@
-#ifndef AUDIO_SOURCE_H
-#define AUDIO_SOURCE_H
+#ifndef _AUDIO_SOURCE_H
+#define _AUDIO_SOURCE_H
 
 #include "AL/al.h"
 #include "AL/alure.h"
 #include "audio_buffer.h"
-#include "audio_system.h"
+//#include "audio_system.h"
 
 #define STREAM_BUFFER_SIZE 65535    // size of chunk in bytes
 #define BUFFERS_NUM 16              // count of chunks
@@ -15,7 +15,7 @@ class AudioSource
 {
 public:
     AudioSource(AudioBuffer* buffer = nullptr);
-    ~AudioSource();
+    virtual ~AudioSource();
 
     void setBuffer(AudioBuffer* buffer);
     void unsetBuffer();
@@ -60,4 +60,4 @@ protected:
 };
 
 
-#endif // AUDIO_SOURCE_H
+#endif // _AUDIO_SOURCE_H
