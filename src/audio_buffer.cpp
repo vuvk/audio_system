@@ -2,7 +2,7 @@
 #include "audio_source.h"
 #include "audio_system.h"
 
-AudioBuffer::AudioBuffer(const std::string fileName, bool isStreamed)
+AudioBuffer::AudioBuffer(const std::string& fileName, bool isStreamed)
 {
     AudioSystem::audioBuffers.push_back(this);
     load(fileName, isStreamed);
@@ -37,7 +37,7 @@ AudioBuffer::~AudioBuffer()
 	AudioSystem::CheckErrorAL();
 }
 
-void AudioBuffer::load(const std::string fileName, bool isStreamed)
+void AudioBuffer::load(const std::string& fileName, bool isStreamed)
 {
     unload();
 

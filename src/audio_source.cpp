@@ -149,6 +149,7 @@ void AudioSource::reset()
 
 void AudioSource::play(bool isLoop)
 {
+    stop();
 	setLooping(isLoop);
 
     if (m_stream)

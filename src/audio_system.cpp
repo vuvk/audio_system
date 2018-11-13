@@ -1,12 +1,10 @@
 #include <cstring>
 #include "audio_system.h"
 #include "file_system.h"
-//#include "audio_source.h"
+#include "audio_listener.h"
 #include "AL/alure.h"
 
-float AudioSystem::m_listenerPos[3] = {};
-float AudioSystem::m_listenerOri[6] = {0, 0, -1, 0, 1, 0};
-float AudioSystem::m_listenerVel[3] = {};
+
 std::vector<AudioSource*> AudioSystem::audioSources;
 std::vector<AudioBuffer*> AudioSystem::audioBuffers;
 
@@ -116,9 +114,7 @@ void AudioSystem::Init()
                         write_callback,
                         seek_callback);
 
-	alListenerfv(AL_POSITION,    m_listenerPos);
-	alListenerfv(AL_ORIENTATION, m_listenerOri);
-	alListenerfv(AL_VELOCITY,    m_listenerVel);	
+    AudioListener::Init();
 }
 
 void AudioSystem::Deinit()
@@ -143,76 +139,6 @@ void AudioSystem::DeleteAllSources()
     for (auto source : audioSources)
         delete source;
     audioSources.clear();
-}
-
-void AudioSystem::SetListenerPosition(float* position)
-{
-    memcpy(m_listenerPos, position, sizeof(float) * 3);
-    alListenerfv(AL_POSITION, position);
-}
-
-void AudioSystem::SetListenerOrientation(float* orientation)
-{
-    memcpy(m_listenerOri, orientation, sizeof(float) * 6);
-    alListenerfv(AL_ORIENTATION, orientation);
-}
-
-void AudioSystem::SetListenerVelocity(float* velocity)
-{
-    memcpy(m_listenerVel, velocity, sizeof(float) * 3);
-    alListenerfv(AL_VELOCITY, velocity);
-}
-
-void AudioSystem::SetListenerPosition(float x, float y, float z)
-{
-    m_listenerPos[0] = x;
-    m_listenerPos[1] = y;
-    m_listenerPos[2] = z;
-    alListenerfv(AL_POSITION, m_listenerPos);
-}
-
-void AudioSystem::SetListenerOrientation(float tX, float tY, float tZ,
-                                         float uX, float uY, float uZ)
-{
-    m_listenerOri[0] = tX;
-    m_listenerOri[1] = tY;
-    m_listenerOri[2] = tZ;
-    m_listenerOri[3] = uX;
-    m_listenerOri[4] = uY;
-    m_listenerOri[5] = uZ;
-    alListenerfv(AL_ORIENTATION, m_listenerOri);
-}
-
-void AudioSystem::SetListenerVelocity(float x, float y, float z)
-{
-    m_listenerVel[0] = x;
-    m_listenerVel[1] = y;
-    m_listenerVel[2] = z;
-    alListenerfv(AL_VELOCITY, m_listenerVel);
-}
-
-void AudioSystem::GetListenerPosition(float* position)
-{
-    if (position)
-    {
-        memcpy(position, m_listenerPos, 3 * sizeof(float));
-    }
-}
-
-void AudioSystem::GetListenerOrientation(float* orientation)
-{
-    if (orientation)
-    {
-        memcpy(orientation, m_listenerOri, 6 * sizeof(float));
-    }
-}
-
-void AudioSystem::GetListenerVelocity (float* velocity)
-{
-    if (velocity)
-    {
-        memcpy(velocity, m_listenerVel, 3 * sizeof(float));
-    }
 }
 
 void AudioSystem::Update()

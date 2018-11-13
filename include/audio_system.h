@@ -19,18 +19,6 @@ public:
     static void DeleteAllBuffers();
     static void DeleteAllSources();
 
-    static void SetListenerPosition   (float* position);
-    static void SetListenerOrientation(float* orientation);
-    static void SetListenerVelocity   (float* velocity);
-    static void SetListenerPosition   (float x, float y, float z);
-    static void SetListenerOrientation(float tX, float tY, float tZ,
-                                       float uX, float uY, float uZ);
-    static void SetListenerVelocity   (float x, float y, float z);
-
-    static void GetListenerPosition   (float* position);
-    static void GetListenerOrientation(float* orientation);
-    static void GetListenerVelocity   (float* velocity);
-
     static void Update();
     static void Suspend();
     static void Resume();
@@ -38,9 +26,8 @@ public:
     static void CheckErrorAL();
 
 private:
-    static float m_listenerPos[3];
-    static float m_listenerOri[6];
-    static float m_listenerVel[3];
+    AudioSystem() {}
+    ~AudioSystem() {}
 };
 
 #endif // _AUDIO_SYSTEM_H

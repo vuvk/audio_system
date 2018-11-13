@@ -15,16 +15,16 @@ using namespace FileSystem;
 class AudioBuffer
 {
 public:
-    AudioBuffer(const std::string fileName, bool isStreamed = false);
-    ~AudioBuffer();
+    AudioBuffer(const std::string& fileName, bool isStreamed = false);
+    virtual ~AudioBuffer();
 
-    void load(const std::string fileName, bool isStreamed = false);
-    void unload();
+    virtual void load(const std::string& fileName, bool isStreamed = false);
+    virtual void unload();
 
-    ALuint getBuffer();
-    const std::string getFileName();
+    virtual ALuint getBuffer();
+    virtual const std::string getFileName();
 
-    bool isStreamed();
+    virtual bool isStreamed();
 
 protected:
     std::string m_fileName = "";
