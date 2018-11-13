@@ -20,6 +20,7 @@ set(HEADERS
     "${INCLUDE_DIR}/audio_buffer.h"
     "${INCLUDE_DIR}/audio_source.h"
     "${INCLUDE_DIR}/audio_system.h"
+    "${INCLUDE_DIR}/audio_listener.h"
     "${INCLUDE_DIR}/file_system.h"
     )
 
@@ -40,6 +41,7 @@ set(SOURCE_EXE
     "${SOURCE_DIR}/audio_system.cpp"
     "${SOURCE_DIR}/audio_source.cpp"
     "${SOURCE_DIR}/audio_buffer.cpp"
+    "${SOURCE_DIR}/audio_listener.cpp"
     "${SOURCE_DIR}/file_system.cpp"
     "${SOURCE_DIR}/main.cpp"
     )
