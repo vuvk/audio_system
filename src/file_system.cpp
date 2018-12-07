@@ -5,12 +5,13 @@
 using namespace FileSystem;
 
 bool FileManager::isInit = false;
+std::string FileManager::baseDir = "";
 
 /**
  * File class
  * */
 
-File::File(const std::string fileName, const std::string mode)
+File::File(const std::string& fileName, const std::string& mode)
 {
     open(fileName, mode);
 }
@@ -19,14 +20,14 @@ File::~File()
     close();
 }
 
-bool File::exists(const std::string fileName)
+bool File::exists(const std::string& fileName)
 {
     if (!FileManager::IsInitialized())
         FileManager::Init(nullptr);
 
     return (PHYSFS_exists(fileName.c_str()));
 }
-std::string File::extractExt(const std::string fileName, bool toLower)
+std::string File::extractExt(const std::string& fileName, bool toLower)
 {
     size_t pos = fileName.find_last_of(".");
     std::string ext = fileName.substr(pos, fileName.size() - pos);
@@ -39,7 +40,7 @@ std::string File::extractExt(const std::string fileName, bool toLower)
 
     return ext;
 }
-int64_t File::size(const std::string fileName)
+int64_t File::size(const std::string& fileName)
 {
     if (exists(fileName))
     {
@@ -51,7 +52,7 @@ int64_t File::size(const std::string fileName)
 
     return -1;
 }
-bool File::readFull(const std::string fileName, char** buffer, uint64_t* bufferSize)
+bool File::readFull(const std::string& fileName, char** buffer, uint64_t* bufferSize)
 {
     if (!exists(fileName))
         return false;
@@ -66,7 +67,7 @@ bool File::readFull(const std::string fileName, char** buffer, uint64_t* bufferS
     return result;
 }
 
-bool File::open(const std::string fileName, const std::string mode)
+bool File::open(const std::string& fileName, const std::string& mode)
 {
     if (!exists(fileName))
         return false;
@@ -209,7 +210,7 @@ FileManager::~FileManager()
     Deinit();
 }
 
-void FileManager::Init(const std::string argv0)
+void FileManager::Init(const std::string& argv0)
 {
     if (isInit)
         return;
@@ -220,6 +221,7 @@ void FileManager::Init(const std::string argv0)
         std::cout << "Failed to initialize PhysFS." << std::endl;
         PrintLastError();
     }
+    baseDir = PHYSFS_getBaseDir();
     isInit = true;
 
     std::cout << "Initialized PhysFS, supported archive formats:";
@@ -237,12 +239,12 @@ void FileManager::Deinit()
     }
 }
 
-bool FileManager::Mount(const std::string path, const char* mountPoint, int append)
+bool FileManager::Mount(const std::string& path, const std::string& mountPoint, int append)
 {
     if (!isInit)
         Init();
 
-    if (PHYSFS_mount(path.c_str(), mountPoint, append) == 0)
+    if (PHYSFS_mount(path.c_str(), mountPoint.c_str(), append) == 0)
     {
         std::cout << "Failed to add \"" << path << "\"" << std::endl;
         PrintLastError();
@@ -276,6 +278,11 @@ void FileManager::ListDirectory(std::string&& dir)
     PHYSFS_freeList(files);
 }
 
+std::string FileManager::GetBaseDir()
+{
+    return baseDir;
+}
+
 bool FileSystem::IsErrorExists()
 {
     return (PHYSFS_getLastErrorCode() != PHYSFS_ERR_OK);
@@ -288,4 +295,41 @@ void FileSystem::PrintLastError()
         PHYSFS_ErrorCode errorCode = PHYSFS_getLastErrorCode();
         std::cout << "Error: " << PHYSFS_getErrorByCode(errorCode) << std::endl;
     }
+}
+
+
+extern "C"
+{
+
+void FileManagerInit(const char* argv0)
+{
+    FileManager::Init(argv0);
+}
+
+void FileManagerDeinit()
+{
+    FileManager::Deinit();
+}
+
+bool FileManagerMount(const char* path, const char* mountPoint, int append)
+{
+    FileManager::Mount(path, mountPoint, append);
+}
+
+const char* FileManagerGetBaseDir()
+{
+    return FileManager::GetBaseDir().c_str();
+}
+
+void FileManagerListDirectory(char** dir)
+{
+    FileManager::ListDirectory((std::string&&)dir);
+}
+
+bool FileManagerIsInitialized()
+{
+    return FileManager::IsInitialized();
+}
+
+
 }

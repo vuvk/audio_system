@@ -40,3 +40,7 @@
 /build/Makefile
 /build/cmake_install.cmake
 *.txt.user
+/build/example
+/lib/
+/build/win32/
+/build/win64/

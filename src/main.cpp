@@ -20,8 +20,8 @@ int main(int argc, const char** argv)
 {
     if (argc < 2)
     {
-        std::cout << "Usage: sound_system <soundfile>" << std::endl;
-        std::cout << "Press ENTER to continue..."      << std::endl;
+        std::cout << "Usage: example <soundfile>" << std::endl;
+        std::cout << "Press ENTER to continue..." << std::endl;
         std::cin.ignore();
         return 1;
     }

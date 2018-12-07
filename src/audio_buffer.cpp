@@ -41,9 +41,6 @@ void AudioBuffer::load(const std::string& fileName, bool isStreamed)
 {
     unload();
 
-    this->m_isStreamed = isStreamed;
-    this->m_fileName   = fileName;
-
     if (!File::exists(fileName))
     {
         std::cout << "The sound file is not exists: " << fileName << std::endl;
@@ -60,6 +57,9 @@ void AudioBuffer::load(const std::string& fileName, bool isStreamed)
             return;
         }
     }
+
+    this->m_isStreamed = isStreamed;
+    this->m_fileName   = fileName;
 }
 
 void AudioBuffer::unload()
@@ -72,6 +72,11 @@ void AudioBuffer::unload()
 
     m_fileName = "";
     m_isStreamed = false;
+}
+
+bool AudioBuffer::isLoaded()
+{
+    return (m_buffer || m_fileName != "");
 }
 
 ALuint AudioBuffer::getBuffer()
@@ -87,4 +92,53 @@ const std::string AudioBuffer::getFileName()
 bool AudioBuffer::isStreamed()
 {
     return this->m_isStreamed;
+}
+
+
+
+extern "C"
+{
+
+void* AudioBufferCreate(const char* fileName, bool isStreamed)
+{
+    return new AudioBuffer(fileName, isStreamed);
+}
+
+void AudioBufferDestroy(void** audioBuffer)
+{
+    delete ((AudioBuffer*)*audioBuffer);
+    *audioBuffer = nullptr;
+}
+
+void AudioBufferLoad(const void* audioBuffer, const char* fileName, bool isStreamed)
+{
+    ((AudioBuffer*)(audioBuffer))->load(fileName, isStreamed);
+}
+
+void AudioBufferUnload(const void* audioBuffer)
+{
+    ((AudioBuffer*)(audioBuffer))->unload();
+}
+
+bool AudioBufferIsLoaded(const void* audioBuffer)
+{
+    return ((AudioBuffer*)(audioBuffer))->isLoaded();
+}
+
+ALuint AudioBufferGetBuffer(const void* audioBuffer)
+{
+    return ((AudioBuffer*)(audioBuffer))->getBuffer();
+}
+
+const char* AudioBufferGetFileName(const void* audioBuffer)
+{
+    return ((AudioBuffer*)(audioBuffer))->getFileName().c_str();
+}
+
+bool AudioBufferIsStreamed(const void* audioBuffer)
+{
+    return ((AudioBuffer*)(audioBuffer))->isStreamed();
+}
+
+
 }

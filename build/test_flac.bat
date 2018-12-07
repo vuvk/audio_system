@@ -1,3 +1,3 @@
 #!/bin/bash
-audio_system music.flac
+example music.flac
 pause

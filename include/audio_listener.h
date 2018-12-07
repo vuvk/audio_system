@@ -6,9 +6,9 @@ class AudioListener
 public:
     static void Init();
 
-    static void SetPosition   (float* position);
-    static void SetOrientation(float* orientation);
-    static void SetVelocity   (float* velocity);
+    static void SetPosition   (const float* position);
+    static void SetOrientation(const float* orientation);
+    static void SetVelocity   (const float* velocity);
     static void SetPosition   (float x, float y, float z);
     static void SetOrientation(float tX, float tY, float tZ,
                                float uX, float uY, float uZ);

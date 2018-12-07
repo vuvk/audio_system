@@ -1,3 +1,3 @@
 #!/bin/bash
-audio_system mono.wav
+example mono.wav
 pause

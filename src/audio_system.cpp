@@ -10,7 +10,6 @@ std::vector<AudioBuffer*> AudioSystem::audioBuffers;
 
 using namespace FileSystem;
 
-
 void* open_callback(const char* fileName, ALuint mode)
 {
     if (!File::exists(fileName))
@@ -181,4 +180,52 @@ void AudioSystem::CheckErrorAL()
     {
         std::cout << "OpenAL error " << errorCode << ": " << alGetString(errorCode) << std::endl;
     }
+}
+
+
+
+extern "C"
+{
+
+void AudioSystemInit()
+{
+    AudioSystem::Init();
+}
+
+void AudioSystemDeinit()
+{
+    AudioSystem::Deinit();
+}
+
+void AudioSystemDeleteAllBuffers()
+{
+    AudioSystem::DeleteAllBuffers();
+}
+
+void AudioSystemDeleteAllSources()
+{
+    AudioSystem::DeleteAllSources();
+}
+
+void AudioSystemUpdate()
+{
+    AudioSystem::Update();
+}
+
+void AudioSystemSuspend()
+{
+    AudioSystem::Suspend();
+}
+
+void AudioSystemResume()
+{
+    AudioSystem::Resume();
+}
+
+void AudioSystemCheckErrorAL()
+{
+    AudioSystem::CheckErrorAL();
+}
+
+
 }

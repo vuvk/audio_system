@@ -1,3 +1,3 @@
 #!/bin/bash
-audio_system music.xm
+example music.xm
 pause

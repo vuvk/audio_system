@@ -11,15 +11,15 @@ namespace FileSystem
     class File
     {
     public:
-        File(const std::string fileName = "", const std::string mode = "r");
+        File(const std::string& fileName = "", const std::string& mode = "r");
         ~File();
 
-        static bool exists(const std::string fileName);
-        static std::string extractExt(const std::string fileName, bool toLower = false);
-        static int64_t size(const std::string fileName);
-        static bool readFull(const std::string fileName, char** buffer, uint64_t* bufferSize);
+        static bool exists(const std::string& fileName);
+        static std::string extractExt(const std::string& fileName, bool toLower = false);
+        static int64_t size(const std::string& fileName);
+        static bool readFull(const std::string& fileName, char** buffer, uint64_t* bufferSize);
 
-        bool open(const std::string fileName, const std::string mode = "r");
+        bool open(const std::string& fileName, const std::string& mode = "r");
         void close();
         int64_t size();
         int64_t tell();
@@ -37,16 +37,14 @@ namespace FileSystem
     class FileManager
     {
     public:
-        FileManager(const std::string argv0 = "");
-        ~FileManager();
-
-        static void Init(const std::string argv0 = "");
+        static void Init(const std::string& argv0 = "");
         static void Deinit();
 
         // A PhysFS-specific function to mount a new path to the virtual directory
         // tree.
-        static bool Mount(const std::string path, const char* mountPoint=nullptr, int append = 0);
+        static bool Mount(const std::string& path, const std::string& mountPoint = "", int append = 0);
         static void ListDirectory(std::string&& dir);
+        static std::string GetBaseDir();
 
         inline static bool IsInitialized()
         {
@@ -54,7 +52,10 @@ namespace FileSystem
         }
 
     private:
+        FileManager(const std::string argv0 = "");
+        ~FileManager();
         static bool isInit;
+        static std::string baseDir;
     };
 
     bool IsErrorExists();

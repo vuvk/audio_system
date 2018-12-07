@@ -45,27 +45,30 @@ void AudioSource::setBuffer(AudioBuffer* buffer)
 {	
     unsetBuffer();
 
-    this->m_audioBuffer = buffer;
-
-    if (buffer->isStreamed())
+    if (buffer)
     {
-        m_stream = alureCreateStreamFromFile(buffer->getFileName().c_str(), STREAM_BUFFER_SIZE, BUFFERS_NUM, m_streamBuffer);
-        if (!m_stream)
-        {
-            std::cout << "Could not create a stream!" << std::endl;
-            std::cout << "Error: " << alureGetErrorString() << std::endl;
-        }
+        this->m_audioBuffer = buffer;
 
-        // patchset for playing midi
-        if (!alureSetStreamPatchset(m_stream, SOUND_FONT_NAME))
+        if (buffer->isStreamed())
         {
-            std::cout << "Could not load sound font '" << SOUND_FONT_NAME << "'!" << std::endl;
-            std::cout << "Error: " << alureGetErrorString() << std::endl;
+            m_stream = alureCreateStreamFromFile(buffer->getFileName().c_str(), STREAM_BUFFER_SIZE, BUFFERS_NUM, m_streamBuffer);
+            if (!m_stream)
+            {
+                std::cout << "Could not create a stream!" << std::endl;
+                std::cout << "Error: " << alureGetErrorString() << std::endl;
+            }
+
+            // patchset for playing midi
+            if (!alureSetStreamPatchset(m_stream, SOUND_FONT_NAME/*(FileManager::GetBaseDir() + SOUND_FONT_NAME).c_str()*/))
+            {
+                std::cout << "Could not load sound font '" << FileManager::GetBaseDir() << SOUND_FONT_NAME << "'!" << std::endl;
+                std::cout << "Error: " << alureGetErrorString() << std::endl;
+            }
         }
-    }
-    else
-    {
-        alSourcei(m_source, AL_BUFFER, buffer->getBuffer());
+        else
+        {
+            alSourcei(m_source, AL_BUFFER, buffer->getBuffer());
+        }
     }
 }
 
@@ -152,13 +155,16 @@ void AudioSource::play(bool isLoop)
     stop();
 	setLooping(isLoop);
 
-    if (m_stream)
+    if (m_source)
     {
-        alureRewindStream(m_stream);
-        alurePlaySourceStream(m_source, m_stream, BUFFERS_NUM, 0, eos_callback, this);
+        if (m_stream)
+        {
+            alureRewindStream(m_stream);
+            alurePlaySourceStream(m_source, m_stream, BUFFERS_NUM, 0, eos_callback, this);
+        }
+        else
+            alurePlaySource(m_source, eos_callback, this);
     }
-    else
-        alurePlaySource(m_source, eos_callback, this);
 }
 
 void AudioSource::pause()
@@ -227,7 +233,6 @@ bool AudioSource::isStopped()
 
 void AudioSource::update()
 {
-    /*
     if (m_audioBuffer)
     {
         if (m_isLoop && isStopped())
@@ -237,5 +242,142 @@ void AudioSource::update()
             play(true);
         }
     }
-    */
+}
+
+
+extern "C"
+{
+
+void* AudioSourceCreate(const void* audioBuffer)
+{
+    return new AudioSource((AudioBuffer*)audioBuffer);
+}
+
+void AudioSourceDestroy(void** audioSource)
+{
+    delete ((AudioSource*)*audioSource);
+    *audioSource = nullptr;
+}
+
+void AudioSourceSetBuffer(const void* audioSource, const void* audioBuffer)
+{
+    ((AudioSource*)audioSource)->setBuffer((AudioBuffer*)audioBuffer);
+}
+
+void AudioSourceUnsetBuffer(const void* audioSource)
+{
+    ((AudioSource*)audioSource)->unsetBuffer();
+}
+
+void* AudioSourceGetBuffer(const void* audioSource)
+{
+    return ((AudioSource*)audioSource)->getBuffer();
+}
+
+void AudioSourceSetLooping(const void* audioSource, bool isLoop)
+{
+    ((AudioSource*)audioSource)->setLooping(isLoop);
+}
+
+void AudioSourceSetPitch(const void* audioSource, float pitch)
+{
+    ((AudioSource*)audioSource)->setPitch(pitch);
+}
+
+void AudioSourceSetGain(const void* audioSource, float gain)
+{
+    ((AudioSource*)audioSource)->setGain(gain);
+}
+
+void AudioSourceSetPosition3v(const void* audioSource, float* position)
+{
+    ((AudioSource*)audioSource)->setPosition(position);
+}
+
+void AudioSourceSetPosition3f(const void* audioSource, float x, float y, float z)
+{
+    ((AudioSource*)audioSource)->setPosition(x, y, z);
+}
+
+void AudioSourceSetRelative(const void* audioSource, bool isRelative)
+{
+    ((AudioSource*)audioSource)->setRelative(isRelative);
+}
+
+void AudioSourceSetVelocity3v(const void* audioSource, float* velocity)
+{
+    ((AudioSource*)audioSource)->setVelocity(velocity);
+}
+
+void AudioSourceSetVelocity3f(const void* audioSource, float x, float y, float z)
+{
+    ((AudioSource*)audioSource)->setVelocity(x, y, z);
+}
+
+void AudioSourceReset(const void* audioSource)
+{
+    ((AudioSource*)audioSource)->reset();
+}
+
+void AudioSourcePlay(const void* audioSource, bool isLoop)
+{
+    ((AudioSource*)audioSource)->play(isLoop);
+}
+
+void AudioSourcePause(const void* audioSource)
+{
+    ((AudioSource*)audioSource)->pause();
+}
+
+void AudioSourceResume(const void* audioSource)
+{
+    ((AudioSource*)audioSource)->resume();
+}
+
+void AudioSourceStop(const void* audioSource)
+{
+    ((AudioSource*)audioSource)->stop();
+}
+
+void AudioSourceUpdate(const void* audioSource)
+{
+    ((AudioSource*)audioSource)->update();
+}
+
+bool AudioSourceIsRelative(const void* audioSource)
+{
+    return ((AudioSource*)audioSource)->isRelative();
+}
+
+bool AudioSourceIsActive(const void* audioSource)
+{
+    return ((AudioSource*)audioSource)->isActive();
+}
+
+bool AudioSourceIsInactive(const void* audioSource)
+{
+    return ((AudioSource*)audioSource)->isInactive();
+}
+
+bool AudioSourceIsPlaying(const void* audioSource)
+{
+    return ((AudioSource*)audioSource)->isPlaying();
+}
+
+bool AudioSourceIsLooping(const void* audioSource)
+{
+    return ((AudioSource*)audioSource)->isLooping();
+}
+
+bool AudioSourceIsPaused(const void* audioSource)
+{
+    return ((AudioSource*)audioSource)->isPaused();
+}
+
+bool AudioSourceIsStopped(const void* audioSource)
+{
+    return ((AudioSource*)audioSource)->isStopped();
+}
+
+
 }

@@ -1,3 +1,3 @@
 #!/bin/bash
-audio_system music.mptm
+example music.mptm
 pause

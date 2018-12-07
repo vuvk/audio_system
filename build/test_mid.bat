@@ -1,3 +1,3 @@
 #!/bin/bash
-audio_system music.mid
+example music.mid
 pause

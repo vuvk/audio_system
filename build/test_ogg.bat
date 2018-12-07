@@ -1,3 +1,3 @@
 #!/bin/bash
-audio_system music.ogg
+example music.ogg
 pause

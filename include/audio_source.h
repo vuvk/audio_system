@@ -59,5 +59,4 @@ protected:
     alureStream* m_stream = nullptr;
 };
 
-
 #endif // _AUDIO_SOURCE_H

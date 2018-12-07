@@ -20,6 +20,7 @@ public:
 
     virtual void load(const std::string& fileName, bool isStreamed = false);
     virtual void unload();
+    virtual bool isLoaded();
 
     virtual ALuint getBuffer();
     virtual const std::string getFileName();
