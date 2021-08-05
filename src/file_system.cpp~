@@ -85,8 +85,6 @@ bool File::open(const std::string& fileName, const std::string& mode)
                 this->m_handle = PHYSFS_openAppend(fileName.c_str());
 
     this->m_fileName = fileName;
-
-    return true;
 }
 
 void File::close()
